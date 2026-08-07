@@ -35,7 +35,7 @@ Git. Install or update plugins with TPM rather than committing either directory.
 - Split key bindings (`"` vertical, `%` horizontal) preserve the current working directory
 - `Ctrl-Shift-Left` and `Ctrl-Shift-Right` swap the current window with the previous or next
 - TPM path configured to `~/.config/tmux/plugins` with TPM run command updated accordingly
-- tmux-fzf uses vi-style shell mode
+- tmux-yank uses vi-style shell mode
 - Continuum saves every 15 minutes and restores sessions on launch, storing data
   in `~/.config/tmux/resurrect`; resurrect backup snapshots are retained for seven days
 
