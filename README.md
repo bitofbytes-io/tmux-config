@@ -47,3 +47,10 @@ terminals. `set-clipboard on` uses OSC 52 when the outer terminal supports it;
 `tmux-yank` additionally integrates with platform clipboard tools such as
 `pbcopy`/`pbpaste` on macOS or `xclip`/`xsel` on Linux. `allow-passthrough` requires
 a tmux version that supports that option.
+
+This configuration assumes trusted programs and output inside tmux. With
+`set-clipboard on`, applications can write to the outer terminal's clipboard;
+with `allow-passthrough on`, a visible pane can send escape sequences directly
+to the outer terminal. Set `set-clipboard` to `external` or `off` and
+`allow-passthrough` to `off` before running untrusted programs or displaying
+untrusted output.
