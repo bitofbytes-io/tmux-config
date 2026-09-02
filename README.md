@@ -22,6 +22,8 @@ Git. Install or update plugins with TPM rather than committing either directory.
 - `tmux-plugins/tmux-resurrect` – persists sessions, windows, and panes to disk
 - `tmux-plugins/tmux-continuum` – automatically saves and restores sessions on interval
 - `sainnhe/tmux-fzf` – interactive session, window, pane, and command selection with fzf
+- `omerxx/tmux-floax` – toggleable floating scratch pane with resize and embed controls
+- `fcsonline/tmux-thumbs` – keyboard hints for quickly copying or pasting visible text
 
 ## Custom configuration highlights
 
@@ -34,6 +36,7 @@ Git. Install or update plugins with TPM rather than committing either directory.
 - Uses vi-style copy mode keys with custom bindings for select (`v`), rectangle toggle (`Ctrl-v`), and yank (`y`)
 - Split key bindings (`"` vertical, `%` horizontal) preserve the current working directory
 - `Ctrl-Shift-Left` and `Ctrl-Shift-Right` swap the current window with the previous or next
+- `Ctrl-Space`, then `t` launches tmux-thumbs; `Ctrl-Space`, then `Space` cycles layouts
 - TPM path configured to `~/.config/tmux/plugins` with TPM run command updated accordingly
 - tmux-yank uses vi-style shell mode
 - Continuum saves every 15 minutes and restores sessions on launch, storing data
