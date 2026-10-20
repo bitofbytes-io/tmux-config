@@ -34,7 +34,14 @@ while read -r repository revision version; do
     if [ -L "$target" ] || [ ! -d "$target/.git" ]; then
       fail "Not a standalone checkout: $target"
     fi
-    [ "$(git -C "$target" remote get-url origin)" = "https://github.com/$repository.git" ] || fail "Unexpected origin: $target"
+    origin=$(git -C "$target" remote get-url origin)
+    # TPM's HTTPS fallback uses the literal git:: userinfo and omits .git.
+    # Accept only these equivalent URLs for the exact manifest repository.
+    case "$origin" in
+      "https://github.com/$repository"|"https://github.com/$repository.git"|\
+      "https://git::@github.com/$repository"|"https://git::@github.com/$repository.git") ;;
+      *) fail "Unexpected origin: $target" ;;
+    esac
     [ -z "$(git -C "$target" status --porcelain --untracked-files=all)" ] || fail "Refusing dirty plugin: $target"
   fi
 done < "$root/plugins.lock"

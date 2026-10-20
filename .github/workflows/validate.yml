@@ -13,7 +13,7 @@ jobs:
         tmux: [system, 3.3a]
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y tmux shellcheck libevent-dev libncurses-dev build-essential bison
+      - run: sudo apt-get update && sudo apt-get install -y tmux shellcheck python3 libevent-dev libncurses-dev build-essential bison
       - name: Build minimum supported tmux
         if: matrix.tmux == '3.3a'
         run: |
