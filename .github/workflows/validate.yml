@@ -1,0 +1,32 @@
+name: Validate tmux
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tmux: [system, 3.3a]
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y tmux shellcheck libevent-dev libncurses-dev build-essential bison
+      - name: Build minimum supported tmux
+        if: matrix.tmux == '3.3a'
+        run: |
+          curl -fsSL https://github.com/tmux/tmux/releases/download/3.3a/tmux-3.3a.tar.gz -o /tmp/tmux.tar.gz
+          echo 'e4fd347843bd0772c4f48d6dde625b0b109b7a380ff15db21e97c11a4dcdf93f  /tmp/tmux.tar.gz' | sha256sum -c -
+          tar -xzf /tmp/tmux.tar.gz -C /tmp
+          cd /tmp/tmux-3.3a
+          ./configure --disable-utf8proc --prefix="$RUNNER_TEMP/tmux"
+          make -j2
+          make install
+          echo "$RUNNER_TEMP/tmux/bin" >> "$GITHUB_PATH"
+      - run: shellcheck scripts/*.sh tests/*.sh
+      - run: sh tests/smoke.sh
+      - name: Verify pinned plugin installation
+        if: matrix.tmux == 'system'
+        run: sh tests/plugins.sh
