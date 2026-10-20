@@ -1,0 +1,12 @@
+# repository exact-commit upstream-version (verified 2026-10-20)
+tmux-plugins/tpm 7bdb7ca33c9cc6440a600202b50142f401b6fe21 v3.1.0
+tmux-plugins/tmux-sensible 2ce7679f9dcf42dffa60abd59a3405b87cb8213b v3.0.0
+christoomey/vim-tmux-navigator 85b8e5f60c1690cde57dbb66467ce39cd1b63343 v1.0
+dreamsofcode-io/catppuccin-tmux b4e0715356f820fc72ea8e8baf34f0f60e891718 commit
+tmux-plugins/tmux-yank fd8000238b324005389076486a2e6e03dba1c64f v2.3.0
+tmux-plugins/tmux-open f99d3189c445188eae5fa9bfeabc95df16deca92 v3.0.0
+tmux-plugins/tmux-resurrect e87d7d592cac97fa38c12395ebec042c154a1844 v4.0.0
+tmux-plugins/tmux-continuum 46e0e0023476018ddb4cc0d44783eede27e5a8ec v3.1.0
+sainnhe/tmux-fzf 2839d6bd0e13b7c5e385e131e4c217917fa73555 commit
+omerxx/tmux-floax 133f526793d90d2caa323c47687dd5544a2c704b commit
+fcsonline/tmux-thumbs 5fdab4dbc1493fbc2a82f3e09ac9b2483bd278c3 0.8.0
