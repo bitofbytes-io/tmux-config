@@ -4,9 +4,24 @@ set -eu
 root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 plugins="$HOME/.config/tmux/plugins"
 staging=
-cleanup() { [ -z "$staging" ] || rm -rf "$staging"; }
-trap cleanup EXIT HUP INT TERM
+lock="$plugins/.install.lock"
+lock_owned=0
+cleanup() {
+  if [ -n "$staging" ]; then rm -rf "$staging"; fi
+  if [ "$lock_owned" = 1 ]; then rmdir "$lock"; fi
+}
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 fail() { printf '%s\n' "$*" >&2; exit 1; }
+
+# mkdir is an atomic, portable mutex. Hold it through preflight and publication.
+mkdir -p "$plugins"
+if ! mkdir "$lock" 2>/dev/null; then
+  fail "Another plugin install may be running; lock exists: $lock"
+fi
+lock_owned=1
 
 # Preflight every existing checkout before changing any of them.
 while read -r repository revision version; do
@@ -24,7 +39,6 @@ while read -r repository revision version; do
   fi
 done < "$root/plugins.lock"
 
-mkdir -p "$plugins"
 while read -r repository revision version; do
   case "$repository" in ''|'#'*) continue ;; esac
   target="$plugins/${repository##*/}"

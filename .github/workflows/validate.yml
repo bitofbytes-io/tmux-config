@@ -28,5 +28,4 @@ jobs:
       - run: shellcheck scripts/*.sh tests/*.sh
       - run: sh tests/smoke.sh
       - name: Verify pinned plugin installation
-        if: matrix.tmux == 'system'
         run: sh tests/plugins.sh

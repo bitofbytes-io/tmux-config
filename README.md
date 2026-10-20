@@ -41,6 +41,9 @@ The configuration also starts cleanly before bootstrap, with core settings and
 bindings available. The installer fetches all 11 exact commits in `plugins.lock`,
 including TPM itself, verifies origin URLs and HEADs, and leaves detached checkouts.
 It refuses dirty or unexpected plugin directories without overwriting local work.
+An atomic directory lock prevents concurrent installers from changing the same
+plugins. If an interrupted process leaves `plugins/.install.lock`, first confirm
+no installer is running, then remove that empty lock directory with `rmdir`.
 For an existing SSH-origin installation, preserve it separately before bootstrap;
 the expected origins are the manifest's GitHub HTTPS URLs.
 
@@ -126,5 +129,8 @@ The smoke test uses a temporary HOME, unsets `TMUX`, and creates a private socke
 It parses and actually sources the configuration without TPM, asserts options
 and representative key bindings, and kills only its own server on exit. The
 plugin integration test verifies exact detached HEADs, repeat installation,
-manifest/config agreement, installed TPM/FloaX/thumbs bindings, and refusal of dirty checkouts or unexpected origins.
+manifest/config agreement, installed TPM/FloaX/thumbs bindings, execution and
+reload through both I/U actions, concurrent installer exclusion, and refusal
+of dirty checkouts or unexpected origins. CI runs the full plugin test on both
+the system tmux and 3.3a.
 Neither test changes your personal configuration or running tmux servers.

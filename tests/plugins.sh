@@ -26,16 +26,27 @@ while read -r repository revision version; do
 done < "$root/plugins.lock"
 # Exercise TPM loading and ensure its defaults cannot replace the pinned bindings.
 cp "$root/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+mkdir -p "$HOME/.config/tmux/scripts"
+cp "$root/scripts/install-plugins.sh" "$HOME/.config/tmux/scripts/"
+cp "$root/plugins.lock" "$HOME/.config/tmux/"
+printf '\nset -g @binding-reloaded complete\n' >> "$HOME/.config/tmux/tmux.conf"
 tmux -S "$socket" -f /dev/null new-session -d -s plugins 'sleep 3600'
 tmux -S "$socket" source-file "$HOME/.config/tmux/tmux.conf"
 tmux -S "$socket" list-keys -T prefix > "$scratch/keys"
 for key in I U; do
   grep -E "prefix +$key +" "$scratch/keys" | grep -q scripts/install-plugins.sh
+  # Replay the actual key's action without requiring an interactive client.
+  sed -n "s/^bind-key[[:space:]]*-T prefix[[:space:]]*${key}[[:space:]]*//p" "$scratch/keys" > "$scratch/binding.conf"
+  [ -s "$scratch/binding.conf" ]
+  tmux -S "$socket" set-option -g @binding-reloaded pending
+  tmux -S "$socket" source-file "$scratch/binding.conf"
+  [ "$(tmux -S "$socket" show-option -gv @binding-reloaded)" = complete ]
 done
 grep -E 'prefix +p +' "$scratch/keys" | grep -q floax.sh
 grep -E 'prefix +P +' "$scratch/keys" | grep -q menu.sh
 grep -E 'prefix +t +' "$scratch/keys" | grep -q tmux-thumbs.sh
 target="$HOME/.config/tmux/plugins/tpm"
+sh "$root/tests/concurrency.sh" "$target"
 printf '%s\n' 'local change' >> "$target/README.md"
 if sh "$root/scripts/install-plugins.sh" >"$scratch/log" 2>&1; then
   echo 'Installer accepted a dirty checkout' >&2
