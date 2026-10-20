@@ -24,8 +24,11 @@ option fetches a floating latest release and is outside this pin guarantee.
 The bootstrap here fetches plugin source only. FloaX uses tmux popups.
 
 If `~/.config/tmux` already exists, back it up or use its existing checkout;
-do not clone over it. An existing `~/.tmux.conf` takes precedence over the XDG
-configuration, so back that up too or explicitly launch with the `-f` below.
+do not clone over it. Supported tmux versions load both an existing `~/.tmux.conf`
+and the XDG configuration, with the XDG file loaded afterward. Back up the legacy
+file to avoid combining settings, or explicitly launch a new server with the
+`-f` below to select only this configuration. An existing server keeps its
+already-loaded configuration; `-f` only applies when starting a server.
 
 ```sh
 mkdir -p "$HOME/.config"

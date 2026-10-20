@@ -16,7 +16,9 @@ while read -r repository revision version; do
   case "$revision" in *[!0-9a-f]*) fail "Invalid revision for $repository" ;; esac
   target="$plugins/${repository##*/}"
   if [ -e "$target" ] || [ -L "$target" ]; then
-    [ ! -L "$target" ] && [ -d "$target/.git" ] || fail "Not a standalone checkout: $target"
+    if [ -L "$target" ] || [ ! -d "$target/.git" ]; then
+      fail "Not a standalone checkout: $target"
+    fi
     [ "$(git -C "$target" remote get-url origin)" = "https://github.com/$repository.git" ] || fail "Unexpected origin: $target"
     [ -z "$(git -C "$target" status --porcelain --untracked-files=all)" ] || fail "Refusing dirty plugin: $target"
   fi

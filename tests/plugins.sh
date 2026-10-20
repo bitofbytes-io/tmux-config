@@ -50,4 +50,18 @@ if sh "$root/scripts/install-plugins.sh" >"$scratch/log" 2>&1; then
   exit 1
 fi
 grep -q 'Unexpected origin' "$scratch/log"
-printf '%s\n' 'Pinned install, repeat install, exact HEADs, plugin bindings, dirty refusal, and origin refusal passed.'
+mv "$target" "$scratch/tpm-checkout"
+mkdir "$target"
+if sh "$root/scripts/install-plugins.sh" >"$scratch/log" 2>&1; then
+  echo 'Installer accepted a non-checkout directory' >&2
+  exit 1
+fi
+grep -q 'Not a standalone checkout' "$scratch/log"
+rmdir "$target"
+ln -s "$scratch/tpm-checkout" "$target"
+if sh "$root/scripts/install-plugins.sh" >"$scratch/log" 2>&1; then
+  echo 'Installer accepted a symlink to a checkout' >&2
+  exit 1
+fi
+grep -q 'Not a standalone checkout' "$scratch/log"
+printf '%s\n' 'Pinned install, repeat install, exact HEADs, plugin bindings, dirty/origin refusal, and non-checkout/symlink refusal passed.'
