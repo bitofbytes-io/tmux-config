@@ -1,6 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "description": "Weekly dependency updates for tmux-config's GitHub Actions: one grouped non-major PR, separate major PRs, and digest-pinned actions.",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "schedule": ["* * * * 4"],
+  "packageRules": [
+    {
+      "description": "One weekly PR for non-major GitHub Actions updates. Majors keep their own PRs.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "groupName": "GitHub Actions"
+    }
   ]
 }
